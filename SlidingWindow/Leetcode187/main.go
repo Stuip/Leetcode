@@ -10,10 +10,8 @@ func findRepeatedDnaSequences(s string) []string {
 	set := make(map[string]int)
 	for i := 0; i <= len(s)-10; i++ {
 		set[s[i:i+10]]++
-	}
-	for k, v := range set {
-		if v > 1 {
-			ans = append(ans, k)
+		if set[s[i:i+10]] > 1 {
+			ans = append(ans, s[i:i+10])
 		}
 	}
 	return ans
