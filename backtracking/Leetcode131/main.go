@@ -14,29 +14,24 @@ func partition(s string) [][]string {
 			return
 		}
 		for i := startidx; i < len(s); i++ {
-			path = append(path, string(s[startidx]))
-			if !isPalindrome(path) {
-				continue
+			if isPalindrome(s, startidx, i) {
+				path = append(path, s[startidx:i+1])
+				dfs(i + 1)
+				path = path[:len(path)-1] // 恢复现场
 			}
-			dfs(i + 1)
-			path = path[:len(path)-1]
 		}
 	}
 	dfs(0)
 	return ans
 }
 
-func isPalindrome(s []string) bool {
-	if len(s) <= 1 {
-		return true
-	}
-	l, r := 0, len(s)-1
-	for l <= r {
-		if s[l] != s[r] {
+func isPalindrome(s string, left, right int) bool {
+	for left < right {
+		if s[left] != s[right] {
 			return false
 		}
-		l++
-		r--
+		left += 1
+		right -= 1
 	}
 	return true
 }
