@@ -17,7 +17,7 @@ func partition(s string) [][]string {
 			if isPalindrome(s, startidx, i) {
 				path = append(path, s[startidx:i+1])
 				dfs(i + 1)
-				path = path[:len(path)-1] // 恢复现场
+				path = path[:len(path)-1]
 			}
 		}
 	}
@@ -36,6 +36,32 @@ func isPalindrome(s string, left, right int) bool {
 	return true
 }
 
+func partitionOther(s string) [][]string {
+	path := []string{}
+	n := len(s)
+	ans := [][]string{}
+	var backtrack func(i, startIdx int)
+	backtrack = func(i, startIdx int) {
+		if i == n {
+			copyPath := make([]string, len(path))
+			copy(copyPath, path)
+			ans = append(ans, copyPath)
+			return
+		}
+		// 不在i, i+1之前分割
+		if i < n-1 {
+			backtrack(i+1, startIdx)
+		}
+		if isPalindrome(s, startIdx, i) {
+			path = append(path, s[startIdx:i+1])
+			backtrack(i+1, i+1)
+			path = path[:len(path)-1]
+		}
+	}
+	backtrack(0, 0)
+	return ans
+}
+
 func main() {
-	fmt.Println(partition("aab"))
+	fmt.Println(partitionOther("aab"))
 }
