@@ -35,7 +35,29 @@ func letterCombinations(digits string) []string {
 
 }
 
+func letterCombinations1(digits string) []string {
+	ans := []string{}
+	n := len(digits)
+	if n == 0 {
+		return ans
+	}
+	path := make([]byte, n)
+	var dfs func(startIdx int)
+	dfs = func(startIdx int) {
+		if startIdx == n {
+			ans = append(ans, string(path))
+			return
+		}
+		for _, c := range phoneMap[string(digits[startIdx])] {
+			path[startIdx] = byte(c)
+			dfs(startIdx + 1)
+		}
+	}
+	dfs(0)
+	return ans
+}
+
 func main() {
 	digits := ""
-	fmt.Println(letterCombinations(digits))
+	fmt.Println(letterCombinations1(digits))
 }
