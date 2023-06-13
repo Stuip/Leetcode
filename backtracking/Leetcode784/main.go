@@ -33,9 +33,29 @@ func letterCasePermutation(s string) []string {
 	}
 	backtrack(0)
 	return ans
+}
 
+func letterCasePermutation1(s string) []string {
+	ans, path := []string{}, []byte{}
+	n := len(s)
+	var backtrack func(startIdx int)
+	backtrack = func(startIdx int) {
+		if startIdx == n {
+			str := string(path)
+			ans = append(ans, str)
+			return
+		}
+		backtrack(startIdx + 1)
+		if unicode.IsDigit(rune(s[startIdx])) {
+			path = append(path, s[startIdx])
+			backtrack(startIdx + 1)
+			path = path[:len(path)-1]
+		}
+	}
+	backtrack(0)
+	return ans
 }
 
 func main() {
-	fmt.Println(letterCasePermutation("3z4"))
+	fmt.Println(letterCasePermutation1("3z4"))
 }
