@@ -33,7 +33,21 @@ func isOdd(num int) bool {
 	return true
 }
 
+func exchange1(nums []int) []int {
+	i, j := 0, len(nums)-1
+	for i < j {
+		for i < j && isOdd(nums[i]) {
+			i += 1
+		}
+		for i < j && !isOdd(nums[j]) {
+			j -= 1
+		}
+		nums[i], nums[j] = nums[j], nums[i]
+	}
+	return nums
+}
+
 func main() {
 	nums := []int{1, 2, 3, 4}
-	fmt.Println(exchange(nums))
+	fmt.Println(exchange1(nums))
 }
