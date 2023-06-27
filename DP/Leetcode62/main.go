@@ -21,5 +21,5 @@ func uniquePaths(m int, n int) int {
 }
 
 func main() {
-	fmt.Println(uniquePaths(1, 1))
+	fmt.Println(uniquePaths(3, 7))
 }
