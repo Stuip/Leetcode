@@ -50,6 +50,24 @@ func rob2(nums []int) int {
 	return f1
 }
 
+func rob3(nums []int) int {
+	n := len(nums)
+	if n == 0 {
+		return 0
+	}
+	dp := make([][]int, n)
+	for i := 0; i < n; i++ {
+		dp[i] = make([]int, 2)
+	}
+	dp[0][0], dp[0][1] = nums[0], 0
+	for i := 1; i < n; i++ {
+		// 第0列表示为打劫，第二列表示不打劫
+		dp[i][0] = dp[i-1][1] + nums[i]
+		dp[i][1] = max(dp[i-1][0], dp[i-1][1])
+	}
+	return max(dp[n-1][0], dp[n-1][1])
+}
+
 func main() {
 	fmt.Println(rob2([]int{1, 2, 3, 1}))
 }
