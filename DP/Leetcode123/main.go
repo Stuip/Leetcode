@@ -23,17 +23,20 @@ func maxProfit(prices []int) int {
 	return profit[n-1]
 }
 
+/*
+时间复杂度为O(n), 空间复杂度为O（1）
+*/
 func maxProfit1(prices []int) int {
 	n := len(prices)
 	minPrice := prices[0]
-	profit := make([]int, n)
+	ans := 0
 	for i := 1; i < n; i++ {
 		if prices[i] < minPrice {
 			minPrice = prices[i]
 		}
-		profit[i] = max(profit[i-1], prices[i]-minPrice)
+		ans = max(ans, prices[i]-minPrice)
 	}
-	return profit[n-1]
+	return ans
 }
 
 func max(a, b int) int {
