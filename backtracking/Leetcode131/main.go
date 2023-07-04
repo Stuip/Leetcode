@@ -63,5 +63,5 @@ func partitionOther(s string) [][]string {
 }
 
 func main() {
-	fmt.Println(partitionOther("aab"))
+	fmt.Println(partition("aab"))
 }
