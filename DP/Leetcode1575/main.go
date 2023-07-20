@@ -75,10 +75,36 @@ func abs(a int) int {
 	return -a
 }
 
+func countRoutes_DP(locations []int, start int, finish int, fuel int) int {
+	n := len(locations)
+	memo := make([][]int, n)
+	for i := 0; i < n; i++ {
+		memo[i] = make([]int, fuel+1)
+	}
+	for i := 0; i <= fuel; i++ {
+		memo[finish][i] = 1
+	}
+
+	for cur := 0; cur <= fuel; cur++ {
+		for i := 0; i < n; i++ {
+			for k := 0; k < n; k++ {
+				if i != k {
+					need := abs(locations[i] - locations[k])
+					if cur >= need {
+						memo[i][cur] += memo[k][cur-need]
+						memo[i][cur] %= mod
+					}
+				}
+			}
+		}
+	}
+	return memo[start][fuel]
+}
+
 func main() {
 	locations := []int{2, 3, 6, 8, 4}
 	start := 1
 	finish := 3
 	fuel := 5
-	fmt.Println(countRoutes(locations, start, finish, fuel))
+	fmt.Println(countRoutes_DP(locations, start, finish, fuel))
 }
