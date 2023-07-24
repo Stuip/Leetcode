@@ -44,8 +44,10 @@ func ipv6Check(ip string) bool {
 				return false
 			}
 			// 每个字符都需要在0-9或a-f或A-F中
-			if _, err := strconv.ParseUint(item, 16, 64); err != nil {
-				return false
+			for _, ch := range item {
+				if !(ch >= '0' && ch <= '9') && !(ch >= 'a' && ch <= 'f' || ch >= 'A' && ch <= 'F') {
+					return false
+				}
 			}
 		}
 		return true
