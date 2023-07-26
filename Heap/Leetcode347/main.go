@@ -41,7 +41,7 @@ func topKFrequent(nums []int, k int) []int {
 		h.Push(Element{k, -v})
 	}
 	heap.Init(h)
-	for k > 0 {
+	for k > 0 && h.Len() > 0 {
 		val := heap.Pop(h).(Element)
 		ans = append(ans, val.x)
 		k--
