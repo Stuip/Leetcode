@@ -4,46 +4,33 @@ import (
 	"fmt"
 )
 
+// use DP[n][sum+1]
 func canPartition(nums []int) bool {
-	sum := 0
+	n, sum := len(nums), 0
 	for _, num := range nums {
 		sum += num
 	}
-	if sum%2 == 1 {
-		return false
-	}
-	target := sum / 2
-	dp := make([]int, target+1)
-	for _, num := range nums {
-		for j := target; j >= num; j-- {
-			dp[j] = max(dp[j], dp[j-num]+num)
-		}
-	}
-	return dp[target] == target
-}
 
-func canPartition1(nums []int) bool {
-	sum := 0
-	for _, num := range nums {
-		sum += num
-	}
-	if sum%2 == 1 {
+	// 如果该和为奇数，则无法成立
+	if sum&1 == 1 {
 		return false
 	}
-	target := sum / 2
-	n := len(nums)
+
+	sum /= 2
 	dp := make([][]int, n)
 	for i := 0; i < n; i++ {
-		dp[i] = make([]int, target+1)
-		dp[i][0] = 0
+		dp[i] = make([]int, sum+1)
 	}
-	for j := target; j >= 0; j-- {
-		if j >= nums[0] {
-			dp[0][j] = nums[0]
+	// 考虑第一个元素
+	for i := sum; i >= 0; i-- {
+		if i >= nums[0] {
+			dp[0][i] = nums[0]
 		}
 	}
+	// 第一层遍历，考虑第i个物品
 	for i := 1; i < n; i++ {
-		for j := target; j >= 1; j-- {
+		// 第二层遍历，考虑第当前背包还剩多少重量
+		for j := sum; j >= 0; j-- {
 			if j >= nums[i] {
 				dp[i][j] = max(dp[i-1][j], dp[i-1][j-nums[i]]+nums[i])
 			} else {
@@ -51,7 +38,76 @@ func canPartition1(nums []int) bool {
 			}
 		}
 	}
-	return dp[n-1][target] == target
+	return dp[n-1][sum] == sum
+}
+
+// use DP[2][sum+1]  使用滚动数组
+func canPartition1(nums []int) bool {
+	n, sum := len(nums), 0
+	for _, num := range nums {
+		sum += num
+	}
+
+	// 如果该和为奇数，则无法成立
+	if sum&1 == 1 {
+		return false
+	}
+
+	sum /= 2
+	dp := make([][]int, 2)
+	for i := 0; i < 2; i++ {
+		dp[i] = make([]int, sum+1)
+	}
+	// 考虑第一个元素
+	for i := sum; i >= 0; i-- {
+		if i >= nums[0] {
+			dp[0][i] = nums[0]
+		}
+	}
+	// 第一层遍历，考虑第i个物品
+	for i := 1; i < n; i++ {
+		// 第二层遍历，考虑第当前背包还剩多少重量
+		for j := sum; j >= 0; j-- {
+			if j >= nums[i] {
+				dp[i&1][j] = max(dp[(i-1)&1][j], dp[(i-1)&1][j-nums[i]]+nums[i])
+			} else {
+				dp[i&1][j] = dp[(i-1)&1][j]
+			}
+		}
+	}
+	return dp[(n-1)&1][sum] == sum
+}
+
+// O(n)
+func canPartition2(nums []int) bool {
+	n, sum := len(nums), 0
+	for _, num := range nums {
+		sum += num
+	}
+
+	// 如果该和为奇数，则无法成立
+	if sum&1 == 1 {
+		return false
+	}
+
+	sum /= 2
+	dp := make([]int, sum+1)
+	// 考虑第一个元素
+	for i := sum; i >= 0; i-- {
+		if i >= nums[0] {
+			dp[i] = nums[0]
+		}
+	}
+	// 第一层遍历，考虑第i个物品
+	for i := 1; i < n; i++ {
+		// 第二层遍历，考虑第当前背包还剩多少重量
+		for j := sum; j >= 0; j-- {
+			if j >= nums[i] {
+				dp[j] = max(dp[j], dp[j-nums[i]]+nums[i])
+			}
+		}
+	}
+	return dp[sum] == sum
 }
 
 func max(a, b int) int {
@@ -63,5 +119,5 @@ func max(a, b int) int {
 
 func main() {
 	nums := []int{1, 5, 10, 6}
-	fmt.Println(canPartition1(nums))
+	fmt.Println(canPartition2(nums))
 }
