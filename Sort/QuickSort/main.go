@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"math/rand"
 )
 
 func main() {
@@ -14,39 +13,29 @@ func sortArray(nums []int) []int {
 	return nums
 }
 
-/**
-快速排序： 基于比较，不稳定算法，时间复杂度为O(nlogn), 最坏情况下O(n ^ 2)
-思想：
-	分治思想，选主元，依次将剩余元素的小于主元放其左侧，大的放右侧;
-	然后取主元的前半部分和后半部分进行同样处理，直至各子序列剩余一个元素结束，排序完成。
-*/
-func QuickSort(nums []int, start, end int) {
-	if start >= end {
-		return
+func QuickSort(nums []int, low, high int) {
+	if high > low {
+		pivot := partition(nums, low, high)
+		QuickSort(nums, low, pivot-1)
+		QuickSort(nums, pivot+1, high)
 	}
-	mid := partition(nums, start, end)
-	QuickSort(nums, start, mid-1)
-	QuickSort(nums, mid+1, end)
 }
 
-func partition(nums []int, start, end int) int {
-	randIdx := start + rand.Intn(end-start+1)
-	nums[start], nums[randIdx] = nums[randIdx], nums[start]
-	for start < end {
-		for start < end && nums[start] < nums[end] {
-			end -= 1
+func partition(nums []int, low, high int) int {
+	pivot := nums[low]
+	for low < high {
+		// high 指针值 >= pivot => high 会向右移
+		for low < high && pivot <= nums[high] {
+			high--
 		}
-		if start < end {
-			nums[start], nums[end] = nums[end], nums[start]
-			start += 1
+		// 填补nums[low]
+		nums[low] = nums[high]
+		// low 指针的值 <= pivot => low 会左移
+		for low < high && pivot >= nums[low] {
+			low++
 		}
-		for start < end && nums[start] < nums[end] {
-			start += 1
-		}
-		if start < end {
-			nums[start], nums[end] = nums[end], nums[start]
-			end -= 1
-		}
+		nums[high] = nums[low]
 	}
-	return start
+	nums[low] = pivot
+	return low
 }
