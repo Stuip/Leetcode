@@ -28,7 +28,21 @@ func jump(nums []int) int {
 	return ans
 }
 
+// DP
+
+func Jump(nums []int) int {
+	n := len(nums)
+	dp := make([]int, n)
+	for i, j := 1, 0; i < n; i++ {
+		for j+nums[j] < i {
+			j++
+		}
+		dp[i] = dp[j] + 1
+	}
+	return dp[n-1]
+}
+
 func main() {
 	nums := []int{1, 2}
-	fmt.Println(jump(nums))
+	fmt.Println(Jump(nums))
 }
