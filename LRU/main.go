@@ -9,7 +9,7 @@ type LRUCache struct {
 
 type DLinkedNode struct {
 	key, value int
-	prev, next *DLinkedNode
+	Prev, Next *DLinkedNode
 }
 
 func initDLinkedNode(key, value int) *DLinkedNode {
@@ -27,8 +27,8 @@ func Constructor(capacity int) LRUCache {
 		head:     initDLinkedNode(0, 0),
 		tail:     initDLinkedNode(0, 0),
 	}
-	l.head.next = l.tail
-	l.tail.prev = l.head
+	l.head.Next = l.tail
+	l.tail.Prev = l.head
 	return l
 }
 
@@ -41,7 +41,7 @@ func (this *LRUCache) Get(key int) int {
 	return node.value
 }
 
-func (this *LRUCache) Put(key int, value int) {
+func (this *LRUCache) Put(key, value int) {
 	if _, ok := this.cache[key]; !ok {
 		node := initDLinkedNode(key, value)
 		this.cache[key] = node
@@ -57,27 +57,28 @@ func (this *LRUCache) Put(key int, value int) {
 		node.value = value
 		this.moveToHead(node)
 	}
+
 }
 
 func (this *LRUCache) removeTail() *DLinkedNode {
-	node := this.tail.prev
+	node := this.tail.Prev
 	this.removeNode(node)
 	return node
+}
+
+func (this *LRUCache) removeNode(node *DLinkedNode) {
+	node.Prev.Next = node.Next
+	node.Next.Prev = node.Prev
+}
+
+func (this *LRUCache) addToHead(node *DLinkedNode) {
+	node.Prev = this.head
+	node.Next = this.head.Next
+	this.head.Next.Prev = node
+	this.head.Next = node
 }
 
 func (this *LRUCache) moveToHead(node *DLinkedNode) {
 	this.removeNode(node)
 	this.addToHead(node)
-}
-
-func (this *LRUCache) removeNode(node *DLinkedNode) {
-	node.next.prev = node.prev
-	node.prev.next = node.next
-}
-
-func (this *LRUCache) addToHead(node *DLinkedNode) {
-	node.next = this.head.next
-	node.prev = this.head
-	this.head.next.prev = node
-	this.head.next = node
 }
