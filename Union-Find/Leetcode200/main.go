@@ -17,7 +17,7 @@ func Constructor(rows, cols int) UnionSet {
 	}
 }
 
-//  寻找到该值的祖先
+// 寻找到该值的祖先
 func (this *UnionSet) find(x int) int {
 	if x == this.root[x] {
 		return x
