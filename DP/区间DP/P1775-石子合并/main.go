@@ -3,6 +3,9 @@ package main
 import "fmt"
 
 /**
+
+https://www.luogu.com.cn/problem/P1775
+
 令状态f(i, j)表示将下标位置i到j的所有的元素合并所获得的价值的最大值,
 那么 f(i, j) = max(f(i, k) + f(k+1, j) + cost), cost是将两组元素起来的代价
 */

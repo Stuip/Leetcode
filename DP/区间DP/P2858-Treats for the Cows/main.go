@@ -2,6 +2,10 @@ package main
 
 import "fmt"
 
+/***
+https://www.luogu.com.cn/problem/P2858
+*/
+
 func main() {
 	var n int
 	fmt.Scanln(&n)
@@ -17,7 +21,7 @@ func treats(prices []int) int {
 	dp := make([][]int, n)
 	for i := 0; i < n; i++ {
 		dp[i] = make([]int, n)
-		dp[i][i] = prices[i] * n
+		dp[i][i] = prices[i] * n // 先将长度为1的情况赋值为最后一个拿的(n * prices[i])
 	}
 	for length := 2; length <= n; length++ { // 天数为2
 		for left := 0; left+length <= n; left++ {
