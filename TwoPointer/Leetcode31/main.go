@@ -1,32 +1,35 @@
 package main
 
-import "sort"
-
 func nextPermutation(nums []int) {
 	if len(nums) <= 1 {
 		return
 	}
-	i := len(nums) - 1
-	for i >= 1 && nums[i-1] >= nums[i] {
-		i -= 1
+
+	i, j, k := len(nums)-2, len(nums)-1, len(nums)-1
+
+	// find: A[i]<A[j]
+	for i >= 0 && nums[i] >= nums[j] {
+		// 这个操作能确保[j, end]是降序的
+		i--
+		j--
 	}
 
-	if i == 0 {
-		sort.Ints(nums)
-		return
+	if i >= 0 { // 不是最后一个排列
+		// 在[j, end]中，寻找到第一个比nums[i]大的数值
+		for nums[i] >= nums[k] {
+			k--
+		}
+		// 交换 nums[i], nums[k]
+		nums[i], nums[k] = nums[k], nums[i]
 	}
-	i -= 1
-	j := len(nums) - 1
-	for nums[j] <= nums[i] {
-		j -= 1
+
+	// 反转 A[j:end]
+	for i, j := j, len(nums)-1; i < j; i, j = i+1, j-1 {
+		nums[i], nums[j] = nums[j], nums[i]
 	}
-	nums[i], nums[j] = nums[j], nums[i]
-	arr := nums[i+1:]
-	sort.Ints(arr)
-	nums = append(nums[:i], arr...)
 }
 
 func main() {
-	nums := []int{1, 2, 3}
+	nums := []int{3, 2, 1}
 	nextPermutation(nums)
 }
